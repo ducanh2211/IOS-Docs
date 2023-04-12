@@ -20,7 +20,8 @@ Hình ảnh trên là ví dụ điển hình cho AppStore của Apple được d
 
 ### Size
 
-Mọi thành phần trong collection view (item, group, section) đều có size, được tạo từ width và height.   
+Mọi thành phần trong collection view (item, group, section) đều có size, được tạo từ width và height. 
+  
 ```swift
 open class NSCollectionLayoutSize : NSObject, NSCopying {
     public convenience init(widthDimension width: NSCollectionLayoutDimension, heightDimension height: NSCollectionLayoutDimension)
@@ -30,7 +31,9 @@ open class NSCollectionLayoutSize : NSObject, NSCopying {
 
 let size = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.4), heightDimension: .fractionalHeight(1.0))
 ```
+
 `NSCollectionLayoutDimension` là class dùng để xác định kích thước.
+
 ```swift
 open class NSCollectionLayoutDimension : NSObject, NSCopying {
     // Xác định kích thước theo tỷ lệ phân số so với width của group mẹ.
@@ -46,11 +49,14 @@ open class NSCollectionLayoutDimension : NSObject, NSCopying {
     open class func estimated(_ estimatedDimension: CGFloat) -> Self
 }
 ```
+
 Ví dụ:
+
 ```swift
 let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.4), heightDimension: .fractionalHeight(1.0))
 let item = NSCollectionLayoutItem(layoutSize: itemSize)
 ```
+
 - Đoạn code trên sẽ tạo 1 item với kích thước là `itemSize`.
 - Width của item `.fractionalWidth(0.4)` tương đương 0.4 width của group chứa nó.
 - Height của item `.fractionalHeight(1.0)` tương đương 1.0 height của group chứa nó 
@@ -58,6 +64,7 @@ let item = NSCollectionLayoutItem(layoutSize: itemSize)
 ### Item
 
 Về cơ bản thì item giống như 1 cell, nhưng nó cũng có thể là 1 số view khác như header, footer...
+
 ```swift
 open class NSCollectionLayoutItem : NSObject, NSCopying {
     public convenience init(layoutSize: NSCollectionLayoutSize)
@@ -78,14 +85,16 @@ open class NSCollectionLayoutSpacing : NSObject, NSCopying {
     open class func fixed(_ fixedSpacing: CGFloat) -> Self // i.e. ==
 }
 ```
+
 - Item được khởi tạo từ NSCollectionLayoutSize
 - 2 properties cần chú ý trong Item là `contentInsets` và `edgeSpacing` (đến phần Group sẽ có ví dụ giải thích)
 
 ### Group
 
-Dùng để chứa các items con.
-Là subclass của `NSCollectionLayoutItem`.
+Dùng để chứa các items con.  
+Là subclass của `NSCollectionLayoutItem`.  
 Container của group có thể là 1 section hoặc 1 group khác (điều đặc biệt).
+
 ```swift
 open class NSCollectionLayoutGroup : NSCollectionLayoutItem, NSCopying {
 
@@ -242,7 +251,7 @@ private func createLayout() -> UICollectionViewLayout {
 
 Ví dụ 4:
 
-```swfit
+```swift
 private func createLayout() -> UICollectionViewLayout {
     // `widthDimension` của item lúc này sẽ không có tác dụng
     let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.4), heightDimension: .fractionalHeight(1))
@@ -269,7 +278,7 @@ Giải thích:
 
 Ví dụ 5:
 
-```swfit
+```swift
 private func createLayout() -> UICollectionViewLayout {
     // `widthDimension` của item lúc này sẽ không có tác dụng
     let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.4), heightDimension: .fractionalHeight(1))
@@ -299,7 +308,7 @@ Nên việc set thêm `edgeSpacing` cho item khi sử dụng method `count` là 
 
 Ví dụ 6:
 
-```swfit
+```swift
 private func createLayout() -> UICollectionViewLayout {
     // Large item
     let largeItemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.5), heightDimension:.fractionalHeight(1.0))
@@ -352,10 +361,7 @@ open class NSCollectionLayoutSection : NSObject, NSCopying {
 }
 ```
 
-Điều cần chú ý ở đâu là property `orthogonalScrollingBehavior`: nó cho phép chúng ta tạo được những layout cực phức tạp.
-Ví dụ: AppStore có collection view cuộn dọc nhưng các section lại có thể cuộn ngang (trái ngược với collection view). 
-Để làm được tính năng này với `FlowLayout` chúng ta cần lồng các collection view con vào trong từng section của collection view mẹ.
-Nhưng với `CompositionalLayout` thì chỉ cần sử dụng `orthogonalScrollingBehavior`.
+Điều cần chú ý ở đâu là property `orthogonalScrollingBehavior`: nó cho phép chúng ta tạo được những layout cực phức tạp. Ví dụ: AppStore có collection view cuộn dọc nhưng các section lại có thể cuộn ngang (trái ngược với collection view). Để làm được tính năng này với `FlowLayout` chúng ta cần lồng các collection view con vào trong từng section của collection view mẹ. Nhưng với `CompositionalLayout` thì chỉ cần sử dụng `orthogonalScrollingBehavior`.
 
 Ví dụ 1:
 ```swift
@@ -403,6 +409,32 @@ Giải thích:
 Dùng trong trường hợp collection view có nhiều section có layout khác nhau.
 - Section 1 có layout như bình thường giống với các ví dụ trên.
 - Section 2 được set `section.orthogonalScrollingBehavior = .groupPaging` nên nó sẽ cuộn ngang (ngược với collection view) và mỗi group sẽ có hành vi như là 1 page.
+
+### Layout
+
+Khi kết hợp 4 thành phần trên chúng ta sẽ ra được compositional layout của collection view.
+
+```swift
+open class UICollectionViewCompositionalLayout : UICollectionViewLayout {
+    public init(section: NSCollectionLayoutSection)
+    public init(section: NSCollectionLayoutSection, configuration: UICollectionViewCompositionalLayoutConfiguration)
+    public init(sectionProvider: @escaping UICollectionViewCompositionalLayoutSectionProvider)
+    public init(sectionProvider: @escaping UICollectionViewCompositionalLayoutSectionProvider, configuration: UICollectionViewCompositionalLayoutConfiguration)
+    @NSCopying open var configuration: UICollectionViewCompositionalLayoutConfiguration
+}
+
+open class UICollectionViewCompositionalLayoutConfiguration : NSObject, NSCopying {
+    open var scrollDirection: UICollectionView.ScrollDirection 
+    open var interSectionSpacing: CGFloat
+    open var boundarySupplementaryItems: [NSCollectionLayoutBoundarySupplementaryItem]
+    open var contentInsetsReference: UIContentInsetsReference
+}
+
+public typealias UICollectionViewCompositionalLayoutSectionProvider = (Int, NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection?
+``` 
+
+Compositional Layout có thể nhận 1 `NSCollectionLayoutSection` để khởi tạo. Tuy nhiên trong trường hợp các section có layout khác nhau thì cần phải sử dụng tới `init(sectionProvider:)`.  
+`SectionProvider` là một closure sẽ được gọi lần đầu tiên `n` lần ứng với `n` section. Sau đó, mỗi khi `NSCollectionLayoutEnvironment` thay đổi thì closure này sẽ được gọi lại.
 
 ### NSCollectionLayoutBoundarySupplementaryItem
 
