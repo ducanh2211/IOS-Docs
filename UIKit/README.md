@@ -120,6 +120,7 @@ open class NSCollectionLayoutGroup : NSCollectionLayoutItem, NSCopying {
 #### Sử dụng `NSCollectionLayoutGroup.horizontal(layoutSize:, subitems:)` để tạo group 
 
 Ví dụ 1:
+
 ```swift
 private func createLayout() -> UICollectionViewLayout {
     let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.4), heightDimension: .fractionalHeight(1))
@@ -136,7 +137,9 @@ private func createLayout() -> UICollectionViewLayout {
     return layout
 }
 ```
+
 ![](Images/simulator-screen-shot-1.png)
+
 Giải thích:
 - Group size lúc này sẽ được so với container của nó là collection view. 
 - Group được tạo bởi `NSCollectionLayoutGroup.horizontal(layoutSize:, subitems:)`.
@@ -147,6 +150,7 @@ spacing còn lại của group không thể chứa -> có 2 items với with lu�
 
 Ví dụ 2:
 Kết hợp với ***fixed*** `edgeSpacing` và `interItemSpacing`
+
 ```swift
 private func createLayout() -> UICollectionViewLayout {
     let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.4), heightDimension: .fractionalHeight(1))
@@ -164,7 +168,9 @@ private func createLayout() -> UICollectionViewLayout {
     return layout
 }
 ```
+
 ![](Images/simulator-screen-shot-2.png)
+
 Giải thích:
 - Kích thước chiều ngang màn hình iphone 13 là `390pt`
 - Width của mỗi item là `40% * 390 = 156` 
@@ -173,6 +179,7 @@ Giải thích:
 
 Ví dụ 3: 
 Kết hợp với ***flexible*** `edgeSpacing` và `interItemSpacing`
+
 ```swift
 private func createLayout() -> UICollectionViewLayout {
     let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.4), heightDimension: .fractionalHeight(1))
@@ -193,7 +200,9 @@ private func createLayout() -> UICollectionViewLayout {
     return layout
 }
 ```
+
 ![](Images/simulator-screen-shot-3.png)
+
 Giải thích:
 - Giống hệt với VD2 nhưng chỉ thay đổi 1 điểm duy nhất `item.edgeSpacing?.leading = .flexible(29)`
 - Width của mỗi item vẫn là `156pt` -> spacing còn lại là `390 - 156*2 - 20 = 78pt`
@@ -205,6 +214,7 @@ Câu trả lời là khi này group sẽ không có đủ spacing cho 2 items v�
 nên group sẽ tự động đẩy item thứ 2 xuống thành 1 group riêng và khi này mỗi group chỉ còn duy nhất 1 item    
 
 Kết quả:
+
 ```swift
 private func createLayout() -> UICollectionViewLayout {
     let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.4), heightDimension: .fractionalHeight(1))
@@ -225,11 +235,13 @@ private func createLayout() -> UICollectionViewLayout {
     return layout
 }
 ```
+
 ![](Images/simulator-screen-shot-4.png)
 
 #### Sử dụng `NSCollectionLayoutGroup.horizontal(layoutSize:, subitem:, count:)` để tạo group 
 
 Ví dụ 4:
+
 ```swfit
 private func createLayout() -> UICollectionViewLayout {
     // `widthDimension` của item lúc này sẽ không có tác dụng
@@ -247,13 +259,16 @@ private func createLayout() -> UICollectionViewLayout {
     return layout
 }
 ```
+
 ![](Images/simulator-screen-shot-5.png)
+
 Giải thích: 
 - Kích thước chiều ngang màn hình iphone 13 là `390pt`
 - Width của mỗi item là `(390 - 20)/2 = 185` 
 - *Mặc dù*, item width được set là `.fractionalWidth(0.4)` nhưng nó không có tác dụng, điều này tương tự với `.absolute`, `.estimated`, `.fractionalHight`
 
 Ví dụ 5:
+
 ```swfit
 private func createLayout() -> UICollectionViewLayout {
     // `widthDimension` của item lúc này sẽ không có tác dụng
@@ -272,7 +287,9 @@ private func createLayout() -> UICollectionViewLayout {
     return layout
 }
 ```
+
 ![](Images/simulator-screen-shot-6.png)
+
 Giải thích: 
 - Số lượng item trong 1 group sẽ được cố định theo `count`
 - Việc tạo group bằng method `count` sẽ phân bổ spacing cho các item bằng nhau và luôn luôn cố định.
@@ -281,6 +298,7 @@ Nếu có `group.interItemSpacing` thì size của item sẽ luôn bằng size `
 Nên việc set thêm `edgeSpacing` cho item khi sử dụng method `count` là không nên.
 
 Ví dụ 6:
+
 ```swfit
 private func createLayout() -> UICollectionViewLayout {
     // Large item
@@ -313,7 +331,9 @@ private func createLayout() -> UICollectionViewLayout {
     return layout
 }
 ```
+
 ![](Images/simulator-screen-shot-7.png)
+
 Giải thích: 
 - `Final group` chứa 2 items: 1 `large item` và 1 `outer group`
 - `Outer group` chứa 2 items: 2 `inner group` 
@@ -322,6 +342,7 @@ Giải thích:
 ### Section
 
 Section giống với section trong flow layout
+
 ```swift
 open class NSCollectionLayoutSection : NSObject, NSCopying {
     public convenience init(group: NSCollectionLayoutGroup)
@@ -330,6 +351,7 @@ open class NSCollectionLayoutSection : NSObject, NSCopying {
     open var orthogonalScrollingBehavior: UICollectionLayoutSectionOrthogonalScrollingBehavior
 }
 ```
+
 Điều cần chú ý ở đâu là property `orthogonalScrollingBehavior`: nó cho phép chúng ta tạo được những layout cực phức tạp.
 Ví dụ: AppStore có collection view cuộn dọc nhưng các section lại có thể cuộn ngang (trái ngược với collection view). 
 Để làm được tính năng này với `FlowLayout` chúng ta cần lồng các collection view con vào trong từng section của collection view mẹ.
@@ -373,7 +395,9 @@ private func createLayout() -> UICollectionViewLayout {
     }
 }
 ```
+
 ![](Images/simulator-screen-shot-8.png)
+
 Giải thích: 
 - `UICollectionViewCompositionalLayout(sectionProvider: @escaping UICollectionViewCompositionalLayoutSectionProvider)` nhận 1 closure để khởi tạo.
 Dùng trong trường hợp collection view có nhiều section có layout khác nhau.
@@ -383,6 +407,7 @@ Dùng trong trường hợp collection view có nhiều section có layout khác
 ### NSCollectionLayoutBoundarySupplementaryItem
 
 Để có thể tạo được header, footer cho collection view hay section thì chúng ta sẽ dùng đến class `NSCollectionLayoutBoundarySupplementaryItem`
+
 ```swift
 open class NSCollectionLayoutBoundarySupplementaryItem : NSCollectionLayoutSupplementaryItem, NSCopying {
     //
@@ -409,7 +434,9 @@ open class NSCollectionLayoutBoundarySupplementaryItem : NSCollectionLayoutSuppl
     public convenience init(layoutSize: NSCollectionLayoutSize, elementKind: String, alignment: NSRectAlignment, absoluteOffset: CGPoint)
 }
 ```
+
 Ví dụ 1:
+
 ```swift
 private func createLayout() -> UICollectionViewLayout {
     // Large item
@@ -448,4 +475,5 @@ private func createLayout() -> UICollectionViewLayout {
     return layout
 }
 ```
+
 ![](Images/simulator-screen-shot-9.png)
