@@ -302,7 +302,7 @@ private func createLayout() -> UICollectionViewLayout {
 Giải thích: 
 - Số lượng item trong 1 group sẽ được cố định theo `count`
 - Việc tạo group bằng method `count` sẽ phân bổ spacing cho các item bằng nhau và luôn luôn cố định.
-Nếu có `group.interItemSpacing` thì size của item sẽ luôn bằng size `(group - interItemSpacing)/count`
+Nếu có `group.interItemSpacing` thì size của item sẽ luôn bằng `(group - interItemSpacing)/count`
 - Nếu set thêm `item.edgeSpacing` thì sẽ làm cho việc hiển thị item bị lỗi, item sẽ bị cắt khỏi màn hình.
 Nên việc set thêm `edgeSpacing` cho item khi sử dụng method `count` là không nên.
 
