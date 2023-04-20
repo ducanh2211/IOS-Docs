@@ -14,7 +14,7 @@ Theo Apple Documents:
 > Note:
 Nếu như chỉ muốn dùng system Camera UI để chụp ảnh hoặc quay video thì nên sử dụng `UIImagePickerController`.  
 
-![](Images/Screen-Shot-2023-04-20-1)
+![](Images/Screen-Shot-2023-04-20-1.png)
 
 Các thành phần chính:
 - Session (AVCaptureSession): là thành phần cốt lõi, nó sẽ điều khiển flow của media capture. Nó nhận vào input, xử lý data và xuất ra ouput.
@@ -58,7 +58,7 @@ class ViewController: UIViewController {
 Trước khi muốn truy cập vào camera trên thiết bị của user thì cần phải được user xác nhận cho phép:
 - Cần phải thêm key `NSCameraUsageDescription` vào file `Info.plist`   
 
-![](Images/Screen-Shot-2023-04-20-2)
+![](Images/Screen-Shot-2023-04-20-2.png)
 
 - Check xem app đã được authorized chưa, nếu chưa thì request 
 
