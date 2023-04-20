@@ -11,10 +11,10 @@ Theo Apple Documents:
 - Cung cấp output ở định dạng khác so với system Camera như: RAW format photos, depth maps, videos với custom timed metadata.
 - Có quyền truy cập trực tiếp vào pixel hoặc audio data streaming từ thiết bị đầu vào (camera sau của iphone,...).
 
-> Note:\\
+> Note:
 Nếu như chỉ muốn dùng system Camera UI để chụp ảnh hoặc quay video thì nên sử dụng `UIImagePickerController`.  
 
-![](Images/Screen Shot 2023-04-20-(1))
+![](Images/Screen Shot 2023-04-20-1)
 
 Các thành phần chính:
 - Session (AVCaptureSession): là thành phần cốt lõi, nó sẽ điều khiển flow của media capture. Nó nhận vào input, xử lý data và xuất ra ouput.
@@ -58,7 +58,7 @@ class ViewController: UIViewController {
 Trước khi muốn truy cập vào camera trên thiết bị của user thì cần phải được user xác nhận cho phép:
 - Cần phải thêm key `NSCameraUsageDescription` vào file `Info.plist`   
 
-![](Images/Screen Shot 2023-04-20-(2))
+![](Images/Screen Shot 2023-04-20-2)
 
 - Check xem app đã được authorized chưa, nếu chưa thì request 
 
@@ -124,7 +124,7 @@ Giải thích:
 - Tại sao lại phải khởi tạo background queue? Vì `captureSession.startRunning()` sẽ bắt đầu flow của session và nó sẽ block thread hiện tại cho đến khi hoàn thành hoặc throw error. Do đó, cần start session ở queue khác main.
 - Property `sessionPreset` sẽ quyết định chất lượng và độ phân giải của media (image, video, audio). Do đó việc set preset sẽ giúp tối ưu performance cũng như dung lượng lưu trữ. Note: `AVCaptureSession.Preset.photo` dùng cho high-quality image, nếu như cố tình record video sẽ dẫn đến lỗi, do đó có thể `preset` khác phù hợp cho cả photo và video.
 
-> Important\\
+> Important
 Gọi `beginConfiguration()` trước khi thay đổi input hay output của session, và gọi `commitConfiguration()` sau khi đã thay đổi.
 
 ### Bước 3: Setup Input
@@ -179,7 +179,7 @@ func setupInputs() {
 
 Giải thích:
 1. Tìm những device phù hợp cho media type `video` (bao gồm cả image).
-Init từ `DiscoverySession(deviceTypes:mediaType:position:) sẽ return lại tất cả device phù hợp (`positon`bao gồm cả front và back camera, nhiều `deviceType` khác nhau).
+Init từ `DiscoverySession(deviceTypes:mediaType:position:)` sẽ return lại tất cả device phù hợp (`positon`bao gồm cả front và back camera, nhiều `deviceType` khác nhau).
 Ngược với nó `default(_:for:position:)` chỉ return lại 1 device phù hợp duy nhất. 
 2. Lặp qua tất cả các device phù hợp và xác định cái nào là front, cái nào là back camera.
 3. Config `backCameraInput` nếu có `backCamera` 
@@ -230,6 +230,38 @@ extension ViewController: AVCapturePhotoCaptureDelegate {
     guard let imageData = photo.fileDataRepresentation(),
           let image = UIImage(data: imageData) else { return }
     self.capturedPhoto = image
+  }
+}
+```
+Kết hợp các bước trên chúng ta sẽ có func `setupAndStartCaptureSession`
+
+```swift
+func setupAndStartCaptureSession() {
+  // Khởi tạo background concurrent queue
+  let sessionQueue = DispatchQueue(label: "concurrent.session.queue")
+  
+  sessionQueue.async {
+    // Khởi tạo 1 capture session mới
+    self.captureSession = AVCaptureSession()
+    
+    // Config preset của session
+    if self.captureSession.canSetSessionPreset(AVCaptureSession.Preset.photo) {
+      self.captureSession.sessionPreset = AVCaptureSession.Preset.photo
+    }
+    
+    // Kết nối input
+    self.setupInputs()
+    
+    // Kết nối output
+    self.setupOutputs()
+    
+    // Setup preview layer
+    DispatchQueue.main.async {
+      self.setupPreviewLayer()
+    }
+    
+    // Start session
+    self.captureSession.startRunning()
   }
 }
 ```
