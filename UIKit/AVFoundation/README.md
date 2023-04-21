@@ -2,7 +2,7 @@
 
 Là framework dùng để làm việc với audio và video trên IOS.
 
-## Capture 
+## 1. Capture 
 
 Theo Apple Documents: 
 `AVFoundation Capture` là một sub-system cung cấp high-level API để thao tác với video, audio, photo. Dùng với mục đích: 
@@ -87,6 +87,8 @@ func requestAuthorization() {
 }
 ```
 
+> Note: completionHandler của method `requestAccess(for:completionHandler:)` được gọi trên 1 thread ngẫu nhiên do system quyết định. Nên nếu setup UI thì cần phải dispatch về main queue.
+
 ### Bước 2: Create và config `AVCaptureSession`
 
 Để create và config `Capture Session` sẽ cần qua các bước:
@@ -124,7 +126,7 @@ Giải thích:
 - Tại sao lại phải khởi tạo background queue? Vì `captureSession.startRunning()` sẽ bắt đầu flow của session và nó sẽ block thread hiện tại cho đến khi hoàn thành hoặc throw error. Do đó, cần start session ở queue khác main.
 - Property `sessionPreset` sẽ quyết định chất lượng và độ phân giải của media (image, video, audio). Do đó việc set preset sẽ giúp tối ưu performance cũng như dung lượng lưu trữ. Note: `AVCaptureSession.Preset.photo` dùng cho high-quality image, nếu như cố tình record video sẽ dẫn đến lỗi, do đó có thể `preset` khác phù hợp cho cả photo và video.
 
-> Important
+> Important:
 Gọi `beginConfiguration()` trước khi thay đổi input hay output của session, và gọi `commitConfiguration()` sau khi đã thay đổi.
 
 ### Bước 3: Setup Input
@@ -297,7 +299,7 @@ Giải thích:
 - Để thay đổi camera thì chúng ta cần remove `camera input` cũ và add `camera input` mới.
 - Nhớ đặt đoạn code thay đổi input giữa `beginConfiguration()` và `commitConfiguration()`
 
-### Reference:
+## Reference:
 - [Making a custom Camera](https://medium.com/@barbulescualex/making-a-custom-camera-in-ios-ea44e3087563)
 - [Building a fullscreen camera app](https://www.appcoda.com/avfoundation-swift-guide/)
 - [AVFoundation Apple Documents](https://developer.apple.com/documentation/avfoundation/capture_setup)
