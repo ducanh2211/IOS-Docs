@@ -1,5 +1,7 @@
 # PhotoKit
 
+[Demo App](https://github.com/ducanh2211/IOS-Docs/tree/main/UIKit/PhotoKit/DisplayImageApp)
+
 Là framework cho phép truy cập và lấy ra được media từ user library.
 
 > Note: Nếu như không cần user cấp quyền truy cập vào toàn bộ library, hoặc không muốn custom photo picker, hoặc app chỉ cần read-access để truy cập vào library thì nên sử dụng `PHPickerViewController` (thay thế `UIImagePickerController` từ IOS 14). `PHPickerViewController` hỗ trợ search, chọn nhiều photo và video. Hơn nữa nó được quản lý bởi hệ thống trong 1 process riêng nên user không cần cấp quyền truy cập vì nó là private.
@@ -35,6 +37,7 @@ extension AlbumCollectionViewController: UICollectionViewDatasource {
 Thêm key `NSPhotoLibraryUsageDescription` và nhập description.
 
 ![](Images/Screen-Shot-2023-04-21-1.png)
+![](Images/Simulator-Screen-Shot-iPhone14-2023-04-21-3.png)
 
 ```swift
 func getPermissionIfNecessary(completionHandler: @escaping (Bool) -> Void) {
@@ -122,6 +125,8 @@ Giải thích:
 
 ### Bước 3: Display images
 
+#### Configure collection view cell
+
 ```swift
 func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
   // 1
@@ -158,6 +163,71 @@ func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath:
   return cell
 }
 ```
+
+Giải thích:
+1. Dequeue cell.
+2. `coverAsset` được dùng làm ảnh bìa cho từng album trong mỗi `section`.
+3. Case `.allPhotos`: lấy ra `PHAsset` object đầu tiên từ `allPhotos` thuộc kiểu `PHFetchResult<PHAsset>`. Sau đó configure cell với method `update(title:count:)`.
+4. Xử lý case `.smartAlbums` và `.userCollections` giống nhau vì đều là `PHFetchResult<PHAssetCollection>`:
+  - Method `PHAsset.fetchAssets(in assetCollection: PHAssetCollection, options: PHFetchOptions?)` sẽ fetch về `PHFetchResult<PHAsset>` trong `asset collection`.
+  - Sau đó, giống với (3) lại lấy ra object `PHAsset` đầu tiên và configure cell.
+5. `fetchImageAsset()` là một custom function dùng để fetch image từ `PHAsset` (phần sau sẽ rõ).
+
+![](Images/Simulator-Screen-Shot-iPhone14-2023-04-21-3.png)
+
+Kết quả sau khi run code, tuy là data đã trả về do số lượng photos trong mỗi group đều thay đổi. Tuy nhiên, chúng ta lại không hề thấy bất cứ image nào. Vậy làm sao để hiển thị image? Phần tiếp sẽ rõ.
+
+#### Display image
+
+```swift
+extension UIImageView {
+  func fetchImageAsset(_ asset: PHAsset?,
+                       targetSize size: CGSize,
+                       contentMode: PHImageContentMode = .aspectFill,
+                       options: PHImageRequestOptions? = nil,
+                       completionHandler: ((Bool) -> Void)?) {
+    
+    guard let asset = asset else {
+      completionHandler?(false)
+      return
+    }
+    
+    let resultHandler: (UIImage?, [AnyHashable: Any]?) -> Void = { image, info in
+      self.image = image
+      completionHandler?(true)
+    }
+    
+    PHImageManager.default().requestImage(
+      for: asset,
+      targetSize: size,
+      contentMode: contentMode,
+      options: options,
+      resultHandler: resultHandler)
+  }
+}
+```
+
+Giải thích:
+- Function `fetchImageAsset()` dùng để fetch image từ asset được truyền vào.
+- `targetSize`: size image mà bạn mong muốn (system sẽ return size gần với target size).
+- `contentMode`:
+- `options`: cần chú ý tới `isSynchronous` và `deliveryMode` (2 cái này có ảnh hưởng tới nhau).
+
+  
+
+Giải thích `PHImageRequestOptions`:
+- `isSynchronous`: default là false, method `requestImage()` sẽ return ngay lập tức và không block thread hiện tại 
+- `deliveryMode`: 
+  - `.opportunistic` (default): Nếu `isSynchronous` là `false` thì `resultHandler` sẽ được gọi 2 lần, lần đầu là với image có chất lượng ảnh thấp và lần gọi sau đó khi image có chất lượng cao đã sẵn sàng. Nếu `isSynchronous` là `true` thì `resultHandler` sẽ được gọi duy nhất 1 lần.
+  - `.highQualityFormat`: sẽ đợi cho đến khi return được image có chất lượng cao nhất và `resultHandler` chỉ được gọi 1 lần duy nhất. 
+  - `.fastFormat`: nếu như image chất lượng cao chưa sẵn sàng thì sẽ return image chất lượng thấp và `resultHandler` chỉ được gọi 1 lần duy nhất.  
+  
+> Note: 
+- Nếu `isSynchronous` là `true` thì `deliveryMode` sẽ tự động được set là `.highQualityFormat`, việc set thủ công `deliveryMode` lúc này là không có ý nghĩa.
+- Nếu `deliveryMode` là `.fastFormat` thì `isSynchronous` bắt buộc phải là `false`.
+
+
+
 
 ## Reference: 
 

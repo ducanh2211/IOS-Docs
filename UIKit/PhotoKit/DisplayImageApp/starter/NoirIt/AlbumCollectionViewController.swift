@@ -83,6 +83,8 @@ class AlbumCollectionViewController: UICollectionViewController {
     // 2
     allPhotos = PHAsset.fetchAssets(with: allPhotosOptions)
     
+//    allPhotos = PHAsset.fetchAssets(with: .video, options: allPhotosOptions)
+    
     // 3
     smartAlbums = PHAssetCollection.fetchAssetCollections(
       with: PHAssetCollectionType.smartAlbum,
@@ -135,7 +137,7 @@ extension AlbumCollectionViewController {
       coverAsset = fetchedAssets.firstObject
       cell.update(title: collection.localizedTitle, count: fetchedAssets.count)
     }
-    
+
     // 5
     guard let asset = coverAsset else { return cell }
     cell.photoView.fetchImageAsset(asset, targetSize: cell.bounds.size) { success in

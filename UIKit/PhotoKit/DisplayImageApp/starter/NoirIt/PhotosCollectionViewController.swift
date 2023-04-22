@@ -17,6 +17,7 @@ class PhotosCollectionViewController: UICollectionViewController {
 
   override func viewDidLoad() {
     super.viewDidLoad()
+    
   }
 
   @IBSegueAction func makePhotoViewController(_ coder: NSCoder) -> PhotoViewController? {

@@ -16,15 +16,41 @@ extension UIImageView {
     }
     // 2
     let resultHandler: (UIImage?, [AnyHashable: Any]?) -> Void = { image, info in
-      self.image = image
-      completionHandler?(true)
+      print("result handler thread: \(Thread.current)")
+      if let image = image {
+        self.image = image
+        print("sucess thread: \(Thread.current)")
+        completionHandler?(true)
+      }
     }
-    // 3
-    PHImageManager.default().requestImage(
+    
+    
+    
+    let option = PHImageRequestOptions()
+    option.isSynchronous = false
+    option.deliveryMode = .opportunistic
+    
+    let manager = PHCachingImageManager()
+    
+//    PHCachingImageManager().startCachingImages(for: [asset], targetSize: size, contentMode: contentMode, options: option)
+    
+    manager.requestImage(
       for: asset,
       targetSize: size,
       contentMode: contentMode,
-      options: options,
+      options: option,
       resultHandler: resultHandler)
+    
+    print("request image thead: \(Thread.current)")
+
   }
 }
+
+/*
+ highQualityFormat:
+ true: null / false: main
+ opportunistic:
+ true: null / false: null - main
+ fastFormat:
+ true: null / false: main
+ */
