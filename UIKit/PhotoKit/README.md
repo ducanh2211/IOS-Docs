@@ -223,8 +223,8 @@ Giải thích `PHImageRequestOptions`:
   - `.fastFormat`: nếu như image chất lượng cao chưa sẵn sàng thì sẽ return image chất lượng thấp và `resultHandler` chỉ được gọi 1 lần duy nhất.  
   
 > Note: 
-- Nếu `isSynchronous` là `true` thì `deliveryMode` sẽ tự động được set là `.highQualityFormat`, việc set thủ công `deliveryMode` lúc này là không có ý nghĩa.
-- Nếu `deliveryMode` là `.fastFormat` thì `isSynchronous` bắt buộc phải là `false`.
+  - Nếu `isSynchronous` là `true` thì `deliveryMode` sẽ tự động được set là `.highQualityFormat`, việc set thủ công `deliveryMode` lúc này là không có ý nghĩa.
+  - Nếu `deliveryMode` là `.fastFormat` thì `isSynchronous` bắt buộc phải là `false`.
 
 
 
