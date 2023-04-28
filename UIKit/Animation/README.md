@@ -1,4 +1,4 @@
-# Animation
+# Animation cho View
 
 Để tạo animation cho `view` chúng ta có một vài cách sau:
 - UIView: 
@@ -107,3 +107,45 @@ Giải thích:
 - `initialSpringVelocity`: là vận tốc ban đầu của `spring` (cái này test chả hiểu gì luôn :)) )
 
 ![](Images/Simulator-Screen-Recording-2.gif)
+
+
+# Animate Transition View Controller
+
+## Convert coordinate system
+
+- Coordinate system là gì? Có thể hiểu đây là hệ toạ độ của 1 view so với 1 object khác (có thể là chính nó, super view, window,...).
+- Tại sao lại cần Coordinate system? Giả sử bây giờ chúng ta cần biết được vị trí của 1 `collection view cell` so với screen. Chúng ta không thể lấy CGReact thông qua frame vì nó là toạ độ so với `collection view` vì vậy chúng ta cần convert hệ toạ độ này sang window của screen.
+
+```swift
+class ViewController: UIViewController {
+  override viewDidLoad() {
+    super.viewDidLoad()
+  
+    let rootView = UIView(frame: CGRect(x: 25, y: 25, width: 100, height: 100))
+    view.addSubview(rootView)
+    
+    let subView = UIView(frame: CGRect(x: 25, y: 25, width: 50, height: 50))
+    rootView.addSubview(subView)
+    
+    let convertedReact1 = subView.convert(subView.bounds, to: view)
+    let convertedReact2 = subView.superview!.convert(subView.frame, to: view)
+    let convertedReact3 = rootView.convert(subView.frame, to: view)
+    
+    print(convertedReact1) // { x: 50, y: 50, width: 50, height: 50 }
+    print(convertedReact2) // { x: 50, y: 50, width: 50, height: 50 }
+    print(convertedReact3) // { x: 50, y: 50, width: 50, height: 50 }
+  }
+}
+```
+
+Giải thích:
+- `subView` có một coordinate system của riêng nó, chính là `bounds`. 
+- `subView` có coordinate system so với `superView` (`rootView`) của nó là `frame`.
+- Chúng ta muốn convert toạ độ của `subView` sang `view` (ở đây chính là window) có thể thực hiện các cách sau:
+  1. `subView.convert(subView.bounds, to: view)`: rectangle là `subView` sẽ được chuyển đổi từ hệ toạ độ của chính nó `bounds` sang hệ toạ độ mong muốn là `view`
+  2. `subView.superview!.convert(subView.frame, to: view)`: rectangle vẫn là `subView` nhưng hệ toạ độ là so với superview (`subView.superView!`) nên rectangle phải là `frame` của `subView` (có thể hiểu chúng ta đang so sánh toạ độ của `subView` so với `superView` sau đó so sánh `superView` với `view`)
+  3. Tương tự với (2) chỉ khác ở cách viết `superView`
+
+> Note:
+> Method `convert(_ react:, to view:UIView) -> CGReact` và `convert(_ rect: CGRect, to coordinateSpace: UICoordinateSpace)`
+> Dùng để convert coordinate system (hệ toạ độ) của một rectangle (`react` parameter) sang một coordinate system khác.

@@ -213,15 +213,17 @@ Giải thích:
 - `contentMode`:
 - `options`: cần chú ý tới `isSynchronous` và `deliveryMode` (2 cái này có ảnh hưởng tới nhau).
 
-  
-
 Giải thích `PHImageRequestOptions`:
 - `isSynchronous`: default là false, method `requestImage()` sẽ return ngay lập tức và không block thread hiện tại 
-- `deliveryMode`: 
+- `deliveryMode`: quyết định chất lượng ảnh trả về
   - `.opportunistic` (default): Nếu `isSynchronous` là `false` thì `resultHandler` sẽ được gọi 2 lần, lần đầu là với image có chất lượng ảnh thấp và lần gọi sau đó khi image có chất lượng cao đã sẵn sàng. Nếu `isSynchronous` là `true` thì `resultHandler` sẽ được gọi duy nhất 1 lần.
   - `.highQualityFormat`: sẽ đợi cho đến khi return được image có chất lượng cao nhất và `resultHandler` chỉ được gọi 1 lần duy nhất. 
   - `.fastFormat`: nếu như image chất lượng cao chưa sẵn sàng thì sẽ return image chất lượng thấp và `resultHandler` chỉ được gọi 1 lần duy nhất.  
-  
+- `resizeMode`: quyết định ảnh sẽ được resize như thế nào để phù hợp với `targetSize` 
+  - `.none`: image sẽ bỏ qua `targetSize` và trả về original size.
+  - `.fast`: image sẽ resize để gần nhất có thể với `targetSize` (có thể lớn hơn hoặc nhỏ hơn) trong khi vẫn giữ nguyên tỷ lệ ảnh. 
+  - `.exact`: image sẽ được resize đúng với `targetSize` 
+
 > Note: 
   - Nếu `isSynchronous` là `true` thì `deliveryMode` sẽ tự động được set là `.highQualityFormat`, việc set thủ công `deliveryMode` lúc này là không có ý nghĩa.
   - Nếu `deliveryMode` là `.fastFormat` thì `isSynchronous` bắt buộc phải là `false`.
