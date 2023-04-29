@@ -1,6 +1,6 @@
 # PhotoKit
 
-[Demo App](https://github.com/ducanh2211/IOS-Docs/tree/main/UIKit/PhotoKit/DisplayImageApp)
+[Demo App PhotoKit](https://github.com/ducanh2211/IOS-Docs/tree/main/UIKit/PhotoKit/DisplayImageApp)
 
 Là framework cho phép truy cập và lấy ra được media từ user library.
 
@@ -233,5 +233,6 @@ Giải thích `PHImageRequestOptions`:
 
 ## Reference: 
 
-[Getting started with PhotoKit Kodeco](https://www.kodeco.com/11764166-getting-started-with-photokit#toc-anchor-011).
-
+1. [Getting started with PhotoKit Kodeco](https://www.kodeco.com/11764166-getting-started-with-photokit#toc-anchor-011).
+2. [Picking a Photo in iOS 14](https://www.biteinteractive.com/picking-a-photo-in-ios-14/)
+3. [Fetch All Photos From Library](https://stackoverflow.com/questions/49383125/swift-3-fetch-all-photos-from-library#comment118672477_59858805)

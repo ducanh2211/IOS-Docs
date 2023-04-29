@@ -509,3 +509,10 @@ private func createLayout() -> UICollectionViewLayout {
 ```
 
 ![](Images/simulator-screen-shot-9.png)
+
+# Reference
+
+1. [All you need to know about UICollectionViewCompositionalLayout](https://medium.com/@dn070287gav/all-what-you-need-to-know-about-uicollectionviewcompositionallayout-f3b2f590bdbe)
+2. [Getting Started with UICollectionViewCompositionalLayout](https://lickability.com/blog/getting-started-with-uicollectionviewcompositionallayout/#supplementary-items)
+3. [How to expand and contract height of a UITableView cell when tapped](https://fluffy.es/how-to-expand-tableview-cell/)
+4. [How to make Expandable TableView using Swift](https://johncodeos.com/how-to-make-expandable-tableview-using-swift/)

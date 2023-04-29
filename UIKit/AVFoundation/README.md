@@ -299,7 +299,7 @@ Giải thích:
 - Để thay đổi camera thì chúng ta cần remove `camera input` cũ và add `camera input` mới.
 - Nhớ đặt đoạn code thay đổi input giữa `beginConfiguration()` và `commitConfiguration()`
 
-## Reference:
-- [Making a custom Camera](https://medium.com/@barbulescualex/making-a-custom-camera-in-ios-ea44e3087563)
-- [Building a fullscreen camera app](https://www.appcoda.com/avfoundation-swift-guide/)
-- [AVFoundation Apple Documents](https://developer.apple.com/documentation/avfoundation/capture_setup)
+# Reference:
+1. [Making a custom Camera](https://medium.com/@barbulescualex/making-a-custom-camera-in-ios-ea44e3087563)
+2. [Building a fullscreen camera app](https://www.appcoda.com/avfoundation-swift-guide/)
+3. [AVFoundation Apple Documents](https://developer.apple.com/documentation/avfoundation/capture_setup)
