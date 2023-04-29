@@ -71,6 +71,7 @@ Giải thích:
 ![](Images/Simulator-Screen-Recording-1.gif)
 
 > Note: 
+>
 > Thứ tự của code sẽ ảnh hưởng đến kết quả của animation. Nếu như trong Minh hoạ trên, nếu (3) xảy ra trước (1) thì coi như (3) sẽ không có tác dụng và khi đó view sẽ di chuyển lệch về bên trái (`center.x` bị thay đổi) 
 
 ### 1.1.2. Method 2: sử dụng thêm `spring`
@@ -113,6 +114,8 @@ Giải thích:
 
 # 2. Animate Transition View Controller
 
+[Demo App](https://github.com/ducanh2211/IOS-Docs/tree/main/UIKit/Animation/DemoApp)
+
 ## 2.1. Convert coordinate system
 
 - Coordinate system là gì? Có thể hiểu đây là hệ toạ độ của 1 view so với 1 object khác (có thể là chính nó, super view, window,...).
@@ -149,6 +152,7 @@ Giải thích:
   3. Tương tự với (2) chỉ khác ở cách viết `superView`
 
 > Note:
+>
 > Method `convert(_ react:, to view: UIView) -> CGReact` và `convert(_ rect: CGRect, to coordinateSpace: UICoordinateSpace)`
 > Dùng để convert coordinate system (hệ toạ độ) của một rectangle (`react` parameter) sang một coordinate system khác.
 > Khi pass `nil` vào parameter `view` hoặc `coordinateSpace` thì UIKit sẽ coi là method đang convert sang coordinate system của `window`
@@ -166,9 +170,10 @@ Giả sử chúng ta có 2 controller: 1 là `master controller`, 2 là `detail 
 
 1. Transitioning Delegate: Mọi `ViewController` đều có một property `transitioningDelegate: UIViewControllerTransitioningDelegate?`. Mỗi khi `present` hoặc `dismiss` thì UIKit sẽ hỏi transitioning delegate của nó về 1 animation controller object. Nếu muốn custom transition thì `master controller` phải conform `UIViewControllerTransitioningDelegate` protocol và set mình là `transitioningDelegate` của `detail controller`.
 2. Animation Controller: hay còn được gọi là `animator object`. Đây là class được return từ `transitioningDelegate`. Nhiệm vụ của nó là mấu chốt trong chuỗi, nó sẽ cung cấp animation cho transition. Animator object conform `UIViewControllerAnimatedTransitioning` protocol.
-3. Transitioning Context: transitioning context conform ``UIViewControllerContextTransitioning` protocol và đóng vai trò quan trọng trong quá trình transitioning. Nó cung cấp thông tin về `view`, `view controller` sẽ tham gia vào transitioning. Transitioning Context sẽ được UIKit config và đưa cho chúng ta sử dụng.
+3. Transitioning Context: transitioning context conform `UIViewControllerContextTransitioning` protocol và đóng vai trò quan trọng trong quá trình transitioning. Nó cung cấp thông tin về `view`, `view controller` sẽ tham gia vào transitioning. Transitioning Context sẽ được UIKit config và đưa cho chúng ta sử dụng.
 
 > Note:
+>
 > Làm theo các bước trên chỉ cho ta non-interactive transition. Nếu muốn user tương tác được với transition thì chúng ta còn phải implement 1 protocol khác `UIViewControllerInteractiveTransitioning`.
 
 ### 2.2.2. Quá trình Transitioning
@@ -192,15 +197,15 @@ protocol UIViewControllerAnimatedTransitioning : NSObjectProtocol {
 5. UIKit gọi method `transitionDuration(using:)` để xác định được thời gian animation.
 6. UIKit gọi `animateTransition(using:)` để thực hiện animation cho transition.
  
-Đối với `dismiss` thì cũng tương tự là như vậy chỉ bước (3) UIKit sẽ gọi animationController(forDismissed:).
+Đối với `dismiss` thì cũng tương tự là như vậy chỉ bước (3) UIKit sẽ gọi `animationController(forDismissed:)`.
 
 ### 2.2.3. Các bước thực hiện custom transitioning
 
-Okay concept của demo lần này là khi tap vào cell trên màn `HomeViewController` sẽ present màn `DetailsViewController`.
+Okay concept của demo lần này là khi tap vào tableview cell trên màn `HomeViewController` sẽ present màn `DetailsViewController`.
 
 #### a. Implement transitioning delegate 
 
-Demo dùng storyboard nên trông hơi `đần` ae chịu khó tý
+Demo dùng storyboard nên trông hơi "đần" ae chịu khó tý.
 
 ```swift
 class HomeViewController: UIViewController {
@@ -231,7 +236,7 @@ extension HomeViewController: UIViewControllerTransitioningDelegate {
 ```
 
 Giải thích:
-- Đầu tiên chúng ta cần gán `HomeViewController` là `transitioningDelegate` của `DetailsViewController` để khi nào có transition thì UIKit sẽ hỏi tới thằng `HomeViewController` (vì là thằng delegate) xem quyết định animation khi trasitioning như thế nào.
+- Đầu tiên chúng ta cần gán `HomeViewController` là `transitioningDelegate` của `DetailsViewController` để khi nào có transition thì UIKit sẽ hỏi tới thằng `HomeViewController` (vì là thằng delegate) xem quyết định animation khi transitioning như thế nào.
 - Sau đó `HomeViewController` sẽ phải conform `UIViewControllerTransitioningDelegate` và implement 2 function (tạm thời return nil).
 
 #### b. Tạo anmation controller
@@ -291,6 +296,7 @@ Transition context cung cấp cho ta 2 phương thức:
 - viewController(forKey): Cho phép ta truy cập vào new controller và old controller thông qua argument UITransitionContextViewKey.from or UITransitionContextViewKey.to 
 
 > Note:
+>
 > Nếu sử dụng UIModalPresentationStyle.automatic thì `toView` sẽ bằng nil (chả hiểu mợ gì luôn @@).
 
 Sau khi đã lấy được `toView` thì nhiệm vụ của chúng ta là add nó vào `containerView`:
@@ -314,15 +320,16 @@ Sau khi đã lấy được `toView` thì nhiệm vụ của chúng ta là add n
 ```
 
 > Note:
+>
 > `transitionContext.completeTransition(_:)` phải luôn luôn được gọi để thông báo transition đã kết thúc vì UIKit sẽ không tự động biết được điều này.
 
 #### d. Present + Dismiss transition
 
 *Thứ nhất*, trước khi tiếp tục chúng ta cùng tìm hiểu qua về method `snapshotView(afterScreenUpdates:)` của UIView:
 - Method sẽ trả về 1 snapshot view dựa trên content đã được render của view hiện tại.
-- Snapshot có thể hiểu như là 1 **image** của view tại 1 thời điểm nhất định. Nó là 1 phiên bản light-weight-baby của view thực tế và không chứa các subview.
+- Snapshot có thể hiểu như là 1 ***image*** của view tại 1 thời điểm nhất định. Nó là 1 phiên bản light-weight-baby của view thực tế và không chứa các subview.
 - `afterScreenUpdates: Bool`: dùng để xác định thời điểm mà snapshot nên capture lại view. Nếu `false` thì snapshot sẽ capture lại ngay thời điểm hiện tại, nếu `true` thì nó sẽ đợi sau khi view đã update xong những thay đổi gần đây rồi mới capture.
-- **Tại sao lại cần đến snapshot view trong khi bạn có thể animate toàn bộ view? Yeah bạn cũng có cùng câu hỏi giống tôi đấy. Việc animate cả 1 view đôi khi sẽ khá là expensive, để tăng hiệu năng và làm cho transition muợt hơn thì người ta sẽ ưu tiên animate snapshot :)).** 
+- ***Tại sao lại cần đến snapshot view trong khi bạn có thể animate toàn bộ view? Yeah bạn cũng có cùng câu hỏi giống mình đấy. Việc animate cả 1 view đôi khi sẽ khá là expensive, để tăng hiệu năng và làm cho transition muợt hơn thì người ta sẽ ưu tiên animate snapshot :)).*** 
 
 *Thứ hai*, tiếp tục với transition, chúng ta sẽ viết lại code trong method `animateTransition(using:)`:
 
@@ -375,6 +382,7 @@ Giải thích:
 - Add `snapshotView` sau khi add `toView` để cho `snapshotView` sẽ hiển thị bên trên `toView` (`addSubView(_:)` sẽ add view vào hierarchy và xếp nó ở lớp trên cùng) để thực hiện animation.
 
 > Note:
+>
 > ***Luôn luôn*** add `toView` vào `containerView` bất kể là `present` hay `dismiss`.   
 
 *Thứ năm*, thêm animation:
@@ -437,4 +445,8 @@ Cũng không cần giải thích quá nhiều: ở đây chúng ta sẽ lấy ce
 
 # Reference
 1. [Animations in Swift](https://medium.com/doyeona/animations-in-swift-f1ee069e21a7)
-1. [Converting frames between view coordinate systems](https://medium.com/hyperoslo/converting-frames-between-view-coordinate-systems-46af928ba6c0)
+2. [Converting frames between view coordinate systems](https://medium.com/hyperoslo/converting-frames-between-view-coordinate-systems-46af928ba6c0)
+3. [iOS Animation Tutorial: Custom View Controller Presentation Transitions](https://www.kodeco.com/2925473-ios-animation-tutorial-custom-view-controller-presentation-transitions#toc-anchor-007)
+4. [Custom UIViewController transitions in Swift](https://medium.com/@tungfam/custom-uiviewcontroller-transitions-in-swift-d1677e5aa0bf)
+5. [Introduction to Custom View Controller Transitions and Animations](https://www.appcoda.com/custom-view-controller-transitions-tutorial/)
+6. BONUS [Tao hieu ung xem anh giong voi Facebook](https://viblo.asia/p/tao-hieu-ung-xem-anh-voi-uiviewcontrolleranimatedtransitioning-jvEla62d5kw)
