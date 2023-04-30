@@ -87,9 +87,11 @@ class PopAnimator: NSObject, UIViewControllerAnimatedTransitioning {
       snapshotView.center = CGPoint(x: finalFrame.midX, y: finalFrame.midY)
       snapshotView.layer.cornerRadius = !self.isPresenting ? 20.0 : 0.0
     }, completion: { _ in
+      print("lan1: \(fromView.superview)")
       transitionedView.alpha = 1
       snapshotView.removeFromSuperview()
       transitionContext.completeTransition(true)
+      print("lan2: \(fromView.superview)")
     })
   }
   

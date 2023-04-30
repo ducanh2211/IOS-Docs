@@ -1,15 +1,8 @@
 # 1. Animation cho View
 
-Để tạo animation cho `view` chúng ta có một vài cách sau:
-- UIView: 
-  - UIView.animate()
-  - UIView.transition()
-  - UIView.addKeyframe()
-- UIViewPropertyAnimator
-- CoreAnimation
-
-
 ## 1.1. UIView.animate() method
+
+Một số property có thể animate bao gồm: `frame`, `bounds`, `center`, `transform`, `alpha`, `backgroundColor`, `contentMode`, `isHidden`,
 
 ```swift
     // Method 1
@@ -102,7 +95,7 @@ UIView.animate(withDuration: 1.5,
 Giải thích:
 - Giống hệt với minh hoạ trên nhưng lần này method `animate` có thêm 2 property là `usingSpringWithDamping`, `initialSpringVelocity`.
 - `usingSpringWithDamping`:
-  - Làm cho animation dao động khi đến cuối animation. Có thể tưởng tượng nó như 1 cái `lò xo` làm cho animation bật nảy ở cuối animation.
+  - Có thể tưởng tượng nó như 1 cái `lò xo` làm cho animation bật nảy ở cuối animation.
   - Giá trị của nó giao động từ 0.0 -> 1.0. Giá trị càng nhỏ thì độ dao động càng lớn.
 - `initialSpringVelocity`: là vận tốc ban đầu của `spring` (cái này test chả hiểu gì luôn :)) )
 
