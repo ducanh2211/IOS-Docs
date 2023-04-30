@@ -46,7 +46,7 @@ Nếu như chúng ta chỉ dùng constraints để tạo layout thì mỗi view 
 
 Dưới đây là `instrinsic content size` của một số UIView phổ thông:
 
-![](Images/Screen-Shot-2023-04-30-1)
+![](Images/Screen-Shot-2023-04-30-1.png)
 
 ### Cách thức hoạt động
 
@@ -81,7 +81,7 @@ Do đó mặc định `priority` của `compression resistance constraint` sẽ 
 Để thay đổi `priority` của 1 view chúng ta có thể dùng:
 - Interface Builder: vào `size inspector` 
 
-![](Images/Screen-Shot-2023-04-30-2)
+![](Images/Screen-Shot-2023-04-30-2.png)
 
 - Code: `setContentHuggingPriority(_ priority: UILayoutPriority, for axis: NSLayoutConstraint.Axis)` và `setContentCompressionResistancePriority(_ priority: UILayoutPriority, for axis: NSLayoutConstraint.Axis)`
 
@@ -156,7 +156,7 @@ A.
 Kết quả:
 
 ![](Images/Simulator-Screen-Recording-2023-04-30-at-16.35.20.gif)
-![](Images/Screen-Shot-2023-04-30-at-16.37.59)
+![](Images/Screen-Shot-2023-04-30-at-16.37.59.png)
 
 B. 
 
@@ -178,8 +178,9 @@ B.
 ```
 
 Kết quả:
+
 ![](Images/Simulator-Screen-Recording-2023-04-30-at-16.40.21.gif)
-![](Images/Screen-Shot-2023-04-30-at-16.40.41)
+![](Images/Screen-Shot-2023-04-30-at-16.40.41.png)
 
 Kết luận:
 
@@ -188,7 +189,7 @@ Dựa trên ảnh gif cùng với console ta có thể kết luận:
 - (A) không có `layoutIfNeeded()` nên layout được tính toán lại (chứng tỏ `setNeedsLayout()` đã được gọi) sau khi animate kết thúc làm cho không có animation nào hết (theo console thì "recalculate" -> "complete" -> "recalculate").
 - (B) Dựa trên console "recalculate" -> "recalculate" -> "complete" chứng tỏ ngay khi `setNeedsLayout()` được gọi thì `layoutIfNeeded()` đã bắt buộc layout engine tính toán lại ngay lập tức trước khi animate hoàn thành. Do đó, chúng ta có thể thấy được animation của view.
 
-# Reference:
+# Reference
 1. [Why calling setNeedsUpdateConstraints isn't needed for constraint changes or animations?](https://stackoverflow.com/questions/47823639/why-calling-setneedsupdateconstraints-isnt-needed-for-constraint-changes-or-ani)
 2. [UIKonf 2017 – Day 2 – Mischa Hildebrand – Auto Layout: From Trailing to Leading](https://www.youtube.com/watch?v=xjArhdrqAn8&t=1200s&ab_channel=UIKonf)
 3. [The Auto Layout Comprehendium](https://mischa-hildebrand.de/en/2017/11/the-auto-layout-comprehendium/)
