@@ -18,14 +18,14 @@ Khi tạo mới 1 constraints bằng code hoặc interface builder thì nó sẽ
 
 Để có thể giải quyết conflict thì bạn có thể giảm `priority` của constraint ít quan trọng hơn. Khi đó nó sẽ trở thành `optional` và được Interface buidler đại diện bằng những đường gạch chân. 
 
-![](Required-and-Optional-Constraints.png)
+![](Images/Required-and-Optional-Constraints.png)
 
 ### Ví dụ
 
 Chúng ta có 1 button với `width` là 300pt nhưng nó lại không được vượt quá `superview's width`. Chúng ta có thể tạo constraints như sau:
 
 button.width = 300              // priority: 999
-button.width &lt superview.width // priority: 1000
+button.width < superview.width // priority: 1000
 
 Vì `button.width = 300` là `optional constraints` nên nếu như xảy ra conflict (khi superview.width &lt 300) thì nó sẽ bị loại bỏ.
 
