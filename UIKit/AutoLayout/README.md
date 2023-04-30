@@ -157,6 +157,7 @@ A.
 Kết quả:
 
 ![](Images/Simulator-Screen-Recording-2023-04-30-at-16.35.20.gif)
+
 ![](Images/Screen-Shot-2023-04-30-at-16.37.59.png)
 
 B. 
@@ -181,6 +182,7 @@ B.
 Kết quả:
 
 ![](Images/Simulator-Screen-Recording-2023-04-30-at-16.40.21.gif)
+
 ![](Images/Screen-Shot-2023-04-30-at-16.40.41.png)
 
 Kết luận:
