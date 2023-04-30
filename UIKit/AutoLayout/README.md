@@ -25,22 +25,23 @@ Khi tạo mới 1 constraints bằng code hoặc interface builder thì nó sẽ
 Chúng ta có 1 button với `width` là 300pt nhưng nó lại không được vượt quá `superview's width`. Chúng ta có thể tạo constraints như sau:
 
 button.width = 300              // priority: 999
+
 button.width < superview.width // priority: 1000
 
-Vì `button.width = 300` là `optional constraints` nên nếu như xảy ra conflict (khi superview.width &lt 300) thì nó sẽ bị loại bỏ.
+Vì `button.width = 300` là `optional constraints` nên nếu như xảy ra conflict (khi `superview.width` < 300) thì nó sẽ bị loại bỏ.
 
 ### Default priorities
 
 Có một vài default priorities hay sử dụng:
-- UILayoutPriority.requỉed      // 1000
-- UILayoutPriority.defaultHigh  // 750
-- UILayoutPriority.defaultLow   // 250
+- UILayoutPriority.required      // 1000
+- UILayoutPriority.defaultHigh   // 750
+- UILayoutPriority.defaultLow    // 250
 
-Theo nguyên tắc, khi thay đổi `priority` của constraint thì nên bắt đầu từ những default priorities này và chỉ tăng hoặc giảm nhẹ giá trị nếu cần. Để biết thêm về `defaultHigh` và `defaultLow` thì đọc phần *Content Hugging & Compression Resistance*.
+Theo nguyên tắc, khi thay đổi `priority` của constraint thì nên bắt đầu từ những default priorities này và chỉ tăng hoặc giảm nhẹ giá trị nếu cần. Để biết thêm về `defaultHigh` và `defaultLow` thì đọc phần [link](#4-content-hugging-compression-resistance).
 
 # 3. Instrinsic Content Size
 
-Nếu như chúng ta chỉ dùng constraints để tạo layout thì mỗi view sẽ cần ít nhất tới 4 constraints. Vì vậy, UIKit cung cấp cho chúng ta một số components với `instrinsic content size`. Có thể hiểu nó là size tự nhiên cho của view, `size` mà được system cung cấp và sẽ được ưu tiên sử dụng mà không cần chúng ta xác định cụ thể `size`. Nó là một property của UIView và có thể bị override.
+Nếu như chúng ta chỉ dùng constraints để tạo layout thì mỗi view sẽ cần ít nhất tới 4 constraints. Vì vậy, UIKit cung cấp cho chúng ta một số components với `instrinsic content size`. Có thể hiểu nó là `size` mặc định của view, được system cung cấp và sẽ được ưu tiên sử dụng mà không cần chúng ta xác định cụ thể `size`. Nó là một property của UIView và có thể bị override.
 
 ### Ví dụ
 
@@ -50,7 +51,7 @@ Dưới đây là `instrinsic content size` của một số UIView phổ thông
 
 ### Cách thức hoạt động
 
-Không có gì quá đặc biệt dối với `intrinsic content size`. Thực tế là qua mỗi *layout pass* hệ thống sẽ tạo constraints cho `intrinsic content size`. Những constraints này đều là optional. Do đó, nó chỉ được áp dụng khi bạn không thêm bất kỳ constraints nào (với `priority` cao hơn).
+Không có gì quá đặc biệt đối với `intrinsic content size`. Thực tế là qua mỗi `layout pass` hệ thống sẽ tạo constraints cho `intrinsic content size`. Những constraints này đều là optional. Do đó, nó chỉ được áp dụng khi bạn không thêm bất kỳ constraints nào (với `priority` cao hơn).
 
 Sức mạnh của `intrinsic content size`: nếu như bạn chỉ constraint `position` của view mà không có `size` thì hệ thống sẽ tự động áp dụng `intrinsic content size`. Nếu như bạn constraint thêm của `size` thì constraint của bạn sẽ được ưu tiên mà không gây ra bất cứ conflict nào. 
 
@@ -68,7 +69,7 @@ Constraint đầu tiên (lớn hơn hoặc bằng) được gọi là ***compres
 
 Constraint thứ hai (nhỏ hơn hoặc bằng) được gọi là ***content hugging***, vì nó chỉ ra rằng `width` của view sẽ không được phép lớn hơn `instrinsic content width` của chính nó. 
 
-Có thể thấy ***Compression Resistance và Content Hugging*** có cái tên nói lên hết ý nghĩa của nó. Constraint đầu tiên thì sẽ "đẩy" bounds của view từ bên trong do đó nó chống lại mọi nỗ lực nén (compress) view nhỏ hơn, trong khi đó constraint thứ hai thì "kéo" bounds của view vào center của nó.
+Có thể thấy ***Compression Resistance và Content Hugging*** có cái tên nói lên hết ý nghĩa. Constraint đầu tiên thì sẽ "đẩy" bounds của view từ bên trong do đó nó chống lại mọi nỗ lực nén (compress) view nhỏ hơn, trong khi đó constraint thứ hai thì "kéo" bounds của view vào center của nó.
 
 ![](Images/Content-Hugging-and-Compression-Resistance-800x500@2x.png) 
 
@@ -87,7 +88,7 @@ Do đó mặc định `priority` của `compression resistance constraint` sẽ 
 
 # 5. Layout Pass
 
-### layoutSubviews()
+### 5.1. layoutSubviews()
 
 Đây là method mà "magic" xảy ra: layoutSubviews() sẽ dựa trên tất cả constraints của view's subviews để tính toán và chuyển chúng thành `frame`.
 
@@ -95,7 +96,7 @@ Như đã nói từ trước, mỗi constraints được đại diện bằng 1 
 
 ![](Images/Resolving-Constraints-400x154@2x.png)
 
-### Layout Algorithm
+### 5.2. Layout Algorithm
 
 Bởi vì constraints còn bị phụ thuộc vào `priority` nên "layout engine" không thể giải quyết tất cả các phương trình tuyến tính cùng một thời điểm. Mà nó tuân thủ theo thuật toán:
 1. Bắt đầu với `priority` cao nhất (1000)
@@ -104,23 +105,23 @@ Bởi vì constraints còn bị phụ thuộc vào `priority` nên "layout engin
  - Có: `priority -= 1` và quay lại step 2
  - Không: layout hoàn thành
 
-Hiểu được thuật toán này là hiểu được cách hoạt động của `priority`. Nhiều developers nghĩ rằng những constraint mà `priorty` &lt 1000 vẫn có tác động lên layout ngay cả khi layout không bị ambigious (non-ambigious). Nhưng điều này không đúng, ngay khi layout không bị ambigious thì tất cả constraints có `priority` thấp hơn sẽ bị bỏ qua. 
+Hiểu được thuật toán này là hiểu được cách hoạt động của `priority`. Nhiều developers nghĩ rằng những constraint mà `priorty` < 1000 vẫn có tác động lên layout ngay cả khi layout không bị ambigious (non-ambigious). Nhưng điều này không đúng, ngay khi layout không bị ambigious thì tất cả constraints có `priority` thấp hơn sẽ bị bỏ qua. 
 
-Bạn luôn luôn nên cố gắng tạo nôn-ambigious layout với *required constraints* và chỉ thực sự giảm `priority` khi bạn muốn chúng bị phá vỡ trong một vài trường hợp cụ thể.
+Bạn nên cố gắng tạo non-ambigious layout với *required constraints* và chỉ thực sự giảm `priority` khi bạn muốn chúng bị phá vỡ trong một vài trường hợp cụ thể.
 
 Một điều quan trọng nữa, nếu như không thể đáp ứng *optinal constraint*, *layout engine* sẽ cố đạt được sát nhất có thể kết quả mong muốn.  
 
-### Invalidate and Force an intermediate layout pass (`setNeedsLayout()` và `layoutIfNeeded()`)
+### 5.3. Invalidate and Force an intermediate layout pass (`setNeedsLayout()` và `layoutIfNeeded()`)
 
 #### Invalidate layout
 
-UIKit có cơ chế ngầm: nếu layout bị đánh dấu (gọi là *flag needsLayout* cho dễ nhoé, *tên này tác giả tự bịa ra cho nó dễ hình dung thôi nha*) là `invalid` thì nó sẽ tính toán lại layout (gọi lại `layoutSubviews()`). Chúng ta có thể thay đổi *flag* bằng method `setNeedsLayout()`, nó sẽ `invalid` layout. Tuy nhiên, layout sẽ không bị tính toán lại *ngay lập tức*, UIKit sẽ lên lịch cho nó được update trong lần `layout cycle` *tiếp theo*.
+UIKit có cơ chế ngầm: nếu layout bị đánh dấu (gọi là *needsLayout*, *tên này tác giả tự bịa ra cho nó dễ hình dung thôi nha*) là `invalid` thì nó sẽ tính toán lại layout (gọi lại `layoutSubviews()`). Chúng ta có thể thay đổi *flag* bằng method `setNeedsLayout()`, nó sẽ `invalid` layout. Tuy nhiên, layout sẽ không bị tính toán lại ***ngay lập tức***, UIKit sẽ lên lịch cho nó được update trong lần `layout cycle` *tiếp theo*.
 
 ![](Images/Layout-Cycle-400x255@2x.png)
 
 > Note:
 >
-> `setNeedsLayout()` sẽ không kích hoạt layout pass ngay lập tức. Nó chỉ invalidate layout và sẽ tự động tính toán lại layout trong lần "layout cycle" tiếp theo.
+> `setNeedsLayout()` sẽ không kích hoạt layout pass ngay lập tức. Nó chỉ invalidate layout và sẽ tự động tính toán lại layout trong lần layout cycle tiếp theo.
 
 #### Force intermediate layout 
 
@@ -186,7 +187,7 @@ Kết luận:
 
 Dựa trên ảnh gif cùng với console ta có thể kết luận:
 - `self.redViewYConstraints.constant = 200` sẽ invalid constraint cũ.
-- (A) không có `layoutIfNeeded()` nên layout được tính toán lại (chứng tỏ `setNeedsLayout()` đã được gọi) sau khi animate kết thúc làm cho không có animation nào hết (theo console thì "recalculate" -> "complete" -> "recalculate").
+- (A) không có `layoutIfNeeded()` nên layout được tính toán lại (chứng tỏ `setNeedsLayout()` đã được gọi) sau khi animate kết thúc làm cho không có animation nào xảy ra (theo console thì "recalculate" -> "complete" -> "recalculate").
 - (B) Dựa trên console "recalculate" -> "recalculate" -> "complete" chứng tỏ ngay khi `setNeedsLayout()` được gọi thì `layoutIfNeeded()` đã bắt buộc layout engine tính toán lại ngay lập tức trước khi animate hoàn thành. Do đó, chúng ta có thể thấy được animation của view.
 
 # Reference
