@@ -37,7 +37,7 @@ Có một vài default priorities hay sử dụng:
 - UILayoutPriority.defaultHigh   // 750
 - UILayoutPriority.defaultLow    // 250
 
-Theo nguyên tắc, khi thay đổi `priority` của constraint thì nên bắt đầu từ những default priorities này và chỉ tăng hoặc giảm nhẹ giá trị nếu cần. Để biết thêm về `defaultHigh` và `defaultLow` thì đọc phần [link](#4-content-hugging-compression-resistance).
+Theo nguyên tắc, khi thay đổi `priority` của constraint thì nên bắt đầu từ những default priorities này và chỉ tăng hoặc giảm nhẹ giá trị nếu cần. Để biết thêm về `defaultHigh` và `defaultLow` thì đọc phần [Content Hugging & Compression Resistance](#4-content-hugging-and-compression-resistance).
 
 # 3. Instrinsic Content Size
 
@@ -55,7 +55,7 @@ Không có gì quá đặc biệt đối với `intrinsic content size`. Thực 
 
 Sức mạnh của `intrinsic content size`: nếu như bạn chỉ constraint `position` của view mà không có `size` thì hệ thống sẽ tự động áp dụng `intrinsic content size`. Nếu như bạn constraint thêm của `size` thì constraint của bạn sẽ được ưu tiên mà không gây ra bất cứ conflict nào. 
 
-# 4. Content Hugging & Compression Resistance
+# 4. Content Hugging and Compression Resistance
 
 Khi tôi nói rằng hệ thống sẽ tạo optional constraints cho `intrinsic content size`, bạn có thể nghĩ đến một constraint đơn giản như thế này chẳng hạn (chúng ta chỉ xét đến horizontal dimension):
 
