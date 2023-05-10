@@ -4,9 +4,9 @@ Có 2 cách để tạo layout:
 - Flow layout (cách truyền thống) `UICollectionViewFlowLayout`
 - Compositional layout (API mới) `UICollectionViewCompositionalLayout`
 
-## Flow layout (hồi sau sẽ rõ)
+## 1. Flow layout (hồi sau sẽ rõ)
 
-## Compositional layout 
+## 2. Compositional layout 
 
 ![](Images/compositional-layout-apple-docs.png) 
 
@@ -18,7 +18,7 @@ Hình ảnh trên là ví dụ điển hình cho AppStore của Apple được d
 - Group - NSCollectionLayoutGroup 
 - Section - NSCollectionLayoutSection
 
-### Size
+### 2.1. Size
 
 Mọi thành phần trong collection view (item, group, section) đều có size, được tạo từ width và height. 
   
@@ -61,7 +61,7 @@ let item = NSCollectionLayoutItem(layoutSize: itemSize)
 - Width của item `.fractionalWidth(0.4)` tương đương 0.4 width của group chứa nó.
 - Height của item `.fractionalHeight(1.0)` tương đương 1.0 height của group chứa nó 
 
-### Item
+### 2.2. Item
 
 Về cơ bản thì item giống như 1 cell, nhưng nó cũng có thể là 1 số view khác như header, footer...
 
@@ -89,7 +89,7 @@ open class NSCollectionLayoutSpacing : NSObject, NSCopying {
 - Item được khởi tạo từ NSCollectionLayoutSize
 - 2 properties cần chú ý trong Item là `contentInsets` và `edgeSpacing` (đến phần Group sẽ có ví dụ giải thích)
 
-### Group
+### 2.3. Group
 
 Dùng để chứa các items con.  
 Là subclass của `NSCollectionLayoutItem`.  
@@ -126,7 +126,7 @@ open class NSCollectionLayoutGroup : NSCollectionLayoutItem, NSCopying {
 }
 ```
 
-#### Sử dụng `NSCollectionLayoutGroup.horizontal(layoutSize:, subitems:)` để tạo group 
+#### 2.3.1. Sử dụng `NSCollectionLayoutGroup.horizontal(layoutSize:, subitems:)` để tạo group 
 
 Ví dụ 1:
 
@@ -247,7 +247,7 @@ private func createLayout() -> UICollectionViewLayout {
 
 ![](Images/simulator-screen-shot-4.png)
 
-#### Sử dụng `NSCollectionLayoutGroup.horizontal(layoutSize:, subitem:, count:)` để tạo group 
+#### 2.3.2. Sử dụng `NSCollectionLayoutGroup.horizontal(layoutSize:, subitem:, count:)` để tạo group 
 
 Ví dụ 4:
 
@@ -348,7 +348,7 @@ Giải thích:
 - `Outer group` chứa 2 items: 2 `inner group` 
 - `Inner group` chứ 2 items: 2 `small item`
 
-### Section
+### 2.4. Section
 
 Section giống với section trong flow layout
 
@@ -410,7 +410,7 @@ Dùng trong trường hợp collection view có nhiều section có layout khác
 - Section 1 có layout như bình thường giống với các ví dụ trên.
 - Section 2 được set `section.orthogonalScrollingBehavior = .groupPaging` nên nó sẽ cuộn ngang (ngược với collection view) và mỗi group sẽ có hành vi như là 1 page.
 
-### Layout
+### 2.5. Layout
 
 Khi kết hợp 4 thành phần trên chúng ta sẽ ra được compositional layout của collection view.
 
@@ -436,7 +436,7 @@ public typealias UICollectionViewCompositionalLayoutSectionProvider = (Int, NSCo
 Compositional Layout có thể nhận 1 `NSCollectionLayoutSection` để khởi tạo. Tuy nhiên trong trường hợp các section có layout khác nhau thì cần phải sử dụng tới `init(sectionProvider:)`.  
 `SectionProvider` là một closure sẽ được gọi lần đầu tiên `n` lần ứng với `n` section. Sau đó, mỗi khi `NSCollectionLayoutEnvironment` thay đổi thì closure này sẽ được gọi lại.
 
-### NSCollectionLayoutBoundarySupplementaryItem
+### 2.6. NSCollectionLayoutBoundarySupplementaryItem
 
 Để có thể tạo được header, footer cho collection view hay section thì chúng ta sẽ dùng đến class `NSCollectionLayoutBoundarySupplementaryItem`
 
