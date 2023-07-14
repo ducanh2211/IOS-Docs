@@ -3,6 +3,63 @@
 
 Là 1 ma trạn 2 chiều đùng để biến đổi view: rotate (xoay), scale (tỷ lệ), translate (dịch chuyển).
 
+```sh
+Là dạng ma trận 3x3 khi ở dạng đầy đủ (3D)
+[ a   b   0
+  c   d   0
+  tx  ty  1 ]
+
+transform.identity có dạng:
+
+[ 1   0   0
+  0   1   0
+  0   0   1 ]
+```
+
+Translation 
+
+```sh
+[ 1   0   0
+  0   1   0
+  tx  ty  1 ]
+```
+
+Khi thay đổi `tx`, `ty` thì view sẽ được dịch chuyển theo trục x và y tương ứng. 
+
+Ví dụ:
+
+```swift
+// Cả 3 cách đều cho ra 1 output
+
+view.transform = view.transform.translatedBy(x: 100, y: 200)
+
+view.transform = CGAffineTransform(translationX: 100, y: 200)
+
+view.transform.tx = 100
+view.transform.ty = 200
+```
+
+![](images/Simulator%20Screen%20Recording%20-%20iPhone%2014%20Pro%20Max%20-%202023-06-28%20at%2014.26.47.gif)
+
+Scale
+
+```sh
+
+```
+
+Giá trị `a` hoặc `d` âm sẽ làm cho view bị flip (lật ngược lại)
+
+```swift
+pinkView.transform.d = -1
+```
+
+![](images/Simulator%20Screen%20Recording%20-%20iPhone%2014%20Pro%20Max%20-%202023-06-28%20at%2014.39.02.gif)
+
+Hàm init .init(a:b:c:d:tx:ty) trong đó:
+- a: 
+
+- tx: 
+
 Những method và initializer đáng chú ý: 
 - `CGAffineTransform.identity`: không có apply transformation (reset view về trạng thái ban đầu).
 - `CGAffineTransform(translationX:y:)`: tạo 1 ma trận dùng để dịch chuyển view theo trục `x` hoặc `y`.
@@ -37,7 +94,7 @@ Những method và initializer đáng chú ý:
 }
 ```
 
-![](Images/Simulator-Screen-Recording-iPhone-14-2023-05-03-at-23.20.37)
+![](Images/Simulator-Screen-Recording-iPhone-14-2023-05-03-at-23.20.37.gif)
 
 Giải thích:
 1. Tạo 1 scale transformation làm cho view nhỏ đi 1 nửa cả width và height.
@@ -62,6 +119,60 @@ Giải thích:
 
 ![](Images/Simulator-Screen-Recording-iPhone-14-2023-05-03-at-23.28.36.gif)
 
+### Chú ý:
+
+```swift
+override func viewDidLoad() {
+    super.viewDidLoad()
+    view.backgroundColor = .purple
+    
+    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+        let scale = CGAffineTransform(scaleX: 0.5, y: 0.5)
+        let transform = self.brownView.transform
+        self.brownView.transform = transform.concatenating(scale)
+        self.view.layoutIfNeeded()
+    }
+    
+    DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+        let move = CGAffineTransform(translationX: 0, y: 500)
+        let transform = self.brownView.transform
+        print("DEBUG: \(transform)")
+        print("DEBUG: \(transform.translatedBy(x: 0, y: 500))")
+        print("DEBUG: \(transform.concatenating(move))")
+        self.brownView.transform = transform.translatedBy(x: 0, y: 500)
+        self.view.layoutIfNeeded()
+    }
+}
+```
+
+```sh
+// console in ra
+DEBUG: CGAffineTransform(a: 0.5, b: 0.0, c: 0.0, d: 0.5, tx: 0.0, ty: 0.0)
+DEBUG: CGAffineTransform(a: 0.5, b: 0.0, c: 0.0, d: 0.5, tx: 0.0, ty: 250.0)
+DEBUG: CGAffineTransform(a: 0.5, b: 0.0, c: 0.0, d: 0.5, tx: 0.0, ty: 500.0)
+```
+
+Output TH1: `self.brownView.transform = transform.translatedBy(x: 0, y: 500)`
+
+![](images/Simulator%20Screen%20Recording%20-%20iPhone%2014%20Pro%20Max%20-%202023-07-13%20at%2016.24.58.gif)
+
+Giải thích: 
+
+Lúc này `transform` của `brownView` = `CGAffineTransform(a: 0.5, b: 0.0, c: 0.0, d: 0.5, tx: 0.0, ty: 250.0)`
+
+Tức là `brownView` chỉ được dịch chuyển y 250pt = 0.5 * 500 (chưa biết giải thích sao lun).
+
+Output TH2: `self.brownView.transform = transform.concatenating(move)`
+
+![](images/Simulator%20Screen%20Recording%20-%20iPhone%2014%20Pro%20Max%20-%202023-07-13%20at%2016.27.54.gif)
+
+Giải thích: 
+
+Lúc này `transform` của `brownView` = `CGAffineTransform(a: 0.5, b: 0.0, c: 0.0, d: 0.5, tx: 0.0, ty: 500.0)`
+
+Tức là `brownView` chỉ được dịch chuyển y 500pt. Điều này được thực hiện bằng method `concatenating`. Nó sẽ nhân các ma trận với nhau để tạo ma trận mới
+
+-> Ma trận mới: `CGAffineTransform(a: 0.5, b: 0.0, c: 0.0, d: 0.5, tx: 0.0, ty: 0.0)` * `CGAffineTransform(a: 1.0, b: 0.0, c: 0.0, d: 1.0, tx: 0.0, ty: 500.0)` = `CGAffineTransform(a: 0.5, b: 0.0, c: 0.0, d: 0.5, tx: 0.0, ty: 500.0)`
 # 2. UIPanGestureRecognizer
 
 ```swift
