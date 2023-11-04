@@ -516,3 +516,35 @@ private func createLayout() -> UICollectionViewLayout {
 2. [Getting Started with UICollectionViewCompositionalLayout](https://lickability.com/blog/getting-started-with-uicollectionviewcompositionallayout/#supplementary-items)
 3. [How to expand and contract height of a UITableView cell when tapped](https://fluffy.es/how-to-expand-tableview-cell/)
 4. [How to make Expandable TableView using Swift](https://johncodeos.com/how-to-make-expandable-tableview-using-swift/)
+
+
+# II. Custom collection view layout
+
+`UICollectionViewFlowLayout` dùng để tạo layout đơn giản dạng grid, muốn tạo layout phức tạp thì cần subclass `UICollectionviewLayout`. Nó giúp define visual attributes của mỗi item trong collection view.
+
+Các attributes là instance của `UICollectionViewLayoutAttributes`. Nó bao gồm properties của mỗi item trong collection view, ví dụ như `frame` hoặc `transform`.
+
+## 1. Core Layout Process
+
+Collection view layout process: nó là sự phối hợp giữa collection view và layout object. Khi collection view cần information, nó sẽ yêu cầu layout object cung cấp bằng cách call các methods sau theo chuẩn thứ tự:
+
+![](images/layout-lifecycle-667x500.png)
+
+Subclass layout phải implement những methods sau:
+- `collectionViewContentSize`: method này return width và height của collection view contents (content size). Collection view dùng information này để configure content size của scroll view.
+
+- `prepare()`: bất kể khi nào layout process được thực hiện, UIKit sẽ gọi tới method này. Đây là nơi thích hợp để tính toán những thông số cần thiết như colleciton view size hoặc position của các items.
+
+- `layoutAttributesForElements(in:)`: trong method này, chúng ta sẽ return lại layout attributes cho mọi item trong 1 khung reactangle 
+
+- `layoutAttributesForItem(at:)`: method này sẽ cung cấp layout information cho collection view tại 1 indexPath.
+
+- `shouldInvalidateLayout(forBoundsChange:)`: nó chỉ ra rằng layout có bị invalidate và update khi bounds của collection view thay đổi hay không. Khi bounds của CLView thay đổi và method return true, thì CLView sẽ invalidate layout bằng cách call method `invalidateLayout(with:)`
+
+- `targetContentOffset(forProposedContentOffset:withScrollingVelocity)`: khi override method này sẽ giúp bạn custom paging behavior giống như set `isPagingEnabled = true`. Method này sẽ return lại `point` nằm ở góc trên bên trái của `contentOffset` mà bạn muốn.
+
+
+
+# Reference
+1. [UICollectionView Custom Layout Tutorial: Pinterest
+](https://www.kodeco.com/4829472-uicollectionview-custom-layout-tutorial-pinterest)

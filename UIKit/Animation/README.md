@@ -443,3 +443,4 @@ Cũng không cần giải thích quá nhiều: ở đây chúng ta sẽ lấy ce
 4. [Custom UIViewController transitions in Swift](https://medium.com/@tungfam/custom-uiviewcontroller-transitions-in-swift-d1677e5aa0bf)
 5. [Introduction to Custom View Controller Transitions and Animations](https://www.appcoda.com/custom-view-controller-transitions-tutorial/)
 6. BONUS [Tao hieu ung xem anh giong voi Facebook](https://viblo.asia/p/tao-hieu-ung-xem-anh-voi-uiviewcontrolleranimatedtransitioning-jvEla62d5kw)
+7. [Su dung CATransform3D](https://stackoverflow.com/questions/347721/how-do-i-apply-a-perspective-transform-to-a-uiview)

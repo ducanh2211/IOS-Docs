@@ -1,7 +1,11 @@
 
 # 1. CGAffineTransform
 
-Là 1 ma trạn 2 chiều đùng để biến đổi view: rotate (xoay), scale (tỷ lệ), translate (dịch chuyển).
+`transform` property của view dùng để thay đổi cách nó được draw trên screen. Nó giúp thay đổi size, location, orientation của view mà không ***thực sự*** làm thay đổi `bounds` và `center`.
+
+> Quy tắc đặt ra là: Không được phép thay đổi `frame` của 1 view mà có `transform` khác `.identity`
+
+Là 1 ma trận 2 chiều đùng để biến đổi view: rotate (xoay), scale (tỷ lệ), translate (dịch chuyển).
 
 ```sh
 Là dạng ma trận 3x3 khi ở dạng đầy đủ (3D)
@@ -173,6 +177,10 @@ Lúc này `transform` của `brownView` = `CGAffineTransform(a: 0.5, b: 0.0, c: 
 Tức là `brownView` chỉ được dịch chuyển y 500pt. Điều này được thực hiện bằng method `concatenating`. Nó sẽ nhân các ma trận với nhau để tạo ma trận mới
 
 -> Ma trận mới: `CGAffineTransform(a: 0.5, b: 0.0, c: 0.0, d: 0.5, tx: 0.0, ty: 0.0)` * `CGAffineTransform(a: 1.0, b: 0.0, c: 0.0, d: 1.0, tx: 0.0, ty: 500.0)` = `CGAffineTransform(a: 0.5, b: 0.0, c: 0.0, d: 0.5, tx: 0.0, ty: 500.0)`
+
+
+
+
 # 2. UIPanGestureRecognizer
 
 ```swift

@@ -1,5 +1,5 @@
 
-# Media Player
+# I. Media Player
 
 ## 1. Request Permisson
 
@@ -120,6 +120,7 @@ enum MPMediaPredicateComparison : Int, @unchecked Sendable {
 Ví dụ: 
 
 ```swift
+let songId = "qwer124Dq"
 let predicate: MPMediaPropertyPredicate = MPMediaPropertyPredicate(value: songId, forProperty: MPMediaItemPropertyPersistentID)
 
 let query: MPMediaQuery = MPMediaQuery()
@@ -267,3 +268,20 @@ While you are maintaining the results of a search, the contents of the music lib
 
 You can also register to receive a notification, .MPMediaLibraryDidChange, when the music library is modified. This notification is not emitted unless you first call the MPMediaLibrary instance method beginGeneratingLibraryChangeNotifications; you should eventually balance this with a call to endGeneratingLibraryChange- Notifications.
 
+# II. Play media on background
+
+Để có thể support play media trên background, chúng ta cần setup những thứ sau:
+- Media playback
+- Remote commands configuration
+- Now playing info center configuration
+
+### 1. Support background mode
+
+
+
+
+# Reference
+
+1. [Playing media while in the background using AV Foundation on iOS Apple docs](https://developer.apple.com/library/archive/qa/qa1668/_index.html)
+2. [Showing Media Player System Controls on Notification Screen in iOS (Swift)](https://medium.com/@varundudeja/showing-media-player-system-controls-on-notification-screen-in-ios-swift-4e27fbf73575)
+3. [Background Audio Player Sync Control Center](https://medium.com/@quangtqag/background-audio-player-sync-control-center-516243c2cdd1)
